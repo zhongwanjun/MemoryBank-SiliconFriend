@@ -18,6 +18,9 @@ Read this in [English](README_en.md).
 ### 模型安装
 SiliconFriend分别提供基于ChatGLM和BELLE两个版本的[LoRA 模型](https://github.com/zhongwanjun/MemoryBank-SiliconFriend/releases/tag/LoRA_checkpoint)。在下载模型前，请确保你已经安装了[Git LFS](https://docs.github.com/zh/repositories/working-with-files/managing-large-files/installing-git-large-file-storage).
 
+### 评估数据
+在构建评估数据时，我们首先使用ChatGPT扮演不同性格的用户，生成包含多个话题的对话历史（memory banks）。然后我们人工构造了100个测试问题(probing questions)评估模型的记忆检索性能。评估数据分为中文和英文两版本：中文版本的对话历史和测试问题分别存储在[eval_data/cn/memory_bank_cn.json](eval_data/cn/memory_bank_cn.json)和[eval_data/cn/probing_questions_cn.jsonl](eval_data/cn/probing_questions_cn.jsonl), 英文版本的的对话历史和测试问题分别存储在[eval_data/en/memory_bank_cn.json](eval_data/cn/memory_bank_cn.json)和[eval_data/en/probing_questions_cn.jsonl](eval_data/cn/probing_questions_cn.jsonl)。
+
 #### 下载SiliconFriend(ChatGLM)
 首先使用[ChatGLM](https://huggingface.co/THUDM/chatglm-6b)模型,再下载它的[LoRA模型](https://github.com/zhongwanjun/MemoryBank-SiliconFriend/releases/download/LoRA_checkpoint/ChatGLM-LoRA-checkpoint.zip)。
 
