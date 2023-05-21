@@ -19,11 +19,10 @@ Read this in [English](README_en.md).
 SiliconFriend分别提供基于ChatGLM和BELLE两个版本的[LoRA 模型](https://github.com/zhongwanjun/MemoryBank-SiliconFriend/releases/tag/LoRA_checkpoint)。在下载模型前，请确保你已经安装了[Git LFS](https://docs.github.com/zh/repositories/working-with-files/managing-large-files/installing-git-large-file-storage).
 
 #### 下载SiliconFriend(ChatGLM)
-首先下载ChatGLM模型,再下载它的LoRA模型。
+首先使用[ChatGLM](https://huggingface.co/THUDM/chatglm-6b)模型,再下载它的LoRA模型。
 
 ```shell
 cd model
-git clone https://huggingface.co/THUDM/chatglm-6b
 git clone https://github.com/zhongwanjun/MemoryBank-SiliconFriend/releases/download/LoRA_checkpoint/ChatGLM-LoRA-checkpoint.zip
 unzip ChatGLM-LoRA-checkpoint.zip
 rm ChatGLM-LoRA-checkpoint.zip
@@ -43,22 +42,37 @@ cd ..
 ```
 
 ### Demo
-
+```
+export OPENAI_API_KEY=YOUR_API_KEY
+(You should modify the OPENAI_API_KEY (used for memory summarization and ChatGPT-based dialog))
+```
 #### SiliconFriend(ChatGLM) 网页版 Demo
 
-设置[SiliconFriend-ChatGLM/launch.sh](SiliconFriend-ChatGLM/launch.sh)中的API KEY 'OPENAI_API_KEY' 和LoRA模型 'adapter_model'。当运行模型时，英文设置 '--language=en'而中文设置 '--language=cn'。运行仓库中的[SiliconFriend-ChatGLM/launch.sh](SiliconFriend-ChatGLM/launch.sh):
+设置[SiliconFriend-ChatGLM-BELLE/launch_chatglm_app.sh](SiliconFriend-ChatGLM-BELLE/launch_chatglm_app.sh)中的API KEY 'OPENAI_API_KEY' 和LoRA模型 'adapter_model'。当运行模型时，英文设置 '--language=en'而中文设置 '--language=cn'。运行仓库中的[SiliconFriend-ChatGLM-BELLE/launch_chatglm_app.sh](SiliconFriend-ChatGLM-BELLE/launch_chatglm_app.sh):
 
 ```shell
-./SiliconFriend-ChatGLM/launch.sh
+
+cd ./SiliconFriend-ChatGLM-BELLE
+bash launch_chatglm_app.sh
 ```
 
 #### SiliconFriend(ChatGLM) 命令行 Demo
 
-设置[SiliconFriend-ChatGLM/launch_cmd.sh](SiliconFriend-ChatGLM/launch_cmd.sh)中的API KEY 'OPENAI_API_KEY' 和LoRA模型 'adapter_model'。当运行模型时，英文设置 '--language=en'而中文设置 '--language=cn'。运行仓库中的[SiliconFriend-ChatGLM/launch_cmd.sh](SiliconFriend-ChatGLM/launch_cmd.sh):
+设置[SiliconFriend-ChatGLM-BELLE/launch_chatglm_cmd.sh](SiliconFriend-ChatGLM-BELLE/launch_chatglm_cmd.sh)中的API KEY 'OPENAI_API_KEY' 和LoRA模型 'adapter_model'。当运行模型时，英文设置 '--language=en'而中文设置 '--language=cn'。运行仓库中的[SiliconFriend-ChatGLM-BELLE/launch_chatglm_cmd.sh](SiliconFriend-ChatGLM-BELLE/launch_chatglm_cmd.sh):
 
 ```shell
-./SiliconFriend-ChatGLM/launch_cmd.sh
+cd ./SiliconFriend-ChatGLM-BELLE
+bash launch_chatglm_cmd.sh
 ```
+#### SiliconFriend(BELLE) 命令行 Demo
+
+设置[SiliconFriend-ChatGLM-BELLE/launch_belle_cmd.sh](SiliconFriend-ChatGLM-BELLE/launch_belle_cmd.sh)中的API KEY 'OPENAI_API_KEY' 和LoRA模型 'adapter_model'。当运行模型时，英文设置 '--language=en'而中文设置 '--language=cn'。运行仓库中的[SiliconFriend-ChatGLM-BELLE/launch_belle_cmd.sh](SiliconFriend-ChatGLM-BELLE/launch_belle_cmd.sh):
+
+```shell
+cd ./SiliconFriend-ChatGLM-BELLE
+bash launch_belle_cmd.sh
+```
+
 #### SiliconFriend(ChatGPT) 网页版 Demo
 
 设置[SiliconFriend-ChatGLM/launch_cmd.sh](SiliconFriend-ChatGLM/launch_cmd.sh)中的API KEY 'OPENAI_API_KEY'。当运行模型时，英文设置 '--language=en'而中文设置 '--language=cn'。运行仓库中的 [SiliconFriend-ChatGPT/launch.sh](SiliconFriend-ChatGPT/launch.sh):
