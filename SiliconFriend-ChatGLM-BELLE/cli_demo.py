@@ -13,8 +13,8 @@ import nltk
 
 import torch
 from transformers.generation.utils import LogitsProcessorList
-prompt_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../')
-bank_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../memory_bank')
+prompt_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../')
+bank_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../memory_bank')
 print(bank_path)
 sys.path.append(prompt_path)
 sys.path.append(bank_path)
