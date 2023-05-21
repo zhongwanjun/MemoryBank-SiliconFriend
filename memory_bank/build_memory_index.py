@@ -31,7 +31,9 @@ def generate_memory_docs(data,language):
             continue
         for date, content in user_memory['history'].items():
             memory_str = f'日期{date}的对话内容为：' if language=='cn' else f'Conversation on {date}：'
-            for query, response in content:
+            for dialog in content:
+                query = dialog['query']
+                response = dialog['response']
                 memory_str += f'\n{user_name}：{query.strip()}'
                 memory_str += f'\nAI：{response.strip()}'
             memory_str += '\n'

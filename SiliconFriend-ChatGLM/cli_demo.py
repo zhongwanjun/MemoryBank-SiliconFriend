@@ -5,10 +5,7 @@ import os, shutil
 import logging
 import sys
 import time, platform
-from app_modules.utils import *
-#  
-from app_modules.presets import *
-from app_modules.overwrites import *
+
 
 import signal,json
 import gradio as gr
@@ -25,6 +22,10 @@ from utils.prompt_utils import *
 from utils.memory_utils import enter_name, summarize_memory_event_personality, save_local_memory
 from utils.model_utils import load_chatglm_tokenizer_and_model,load_lora_chatglm_tokenizer_and_model,load_prefix_chatglm_tokenizer_and_model, InvalidScoreLogitsProcessor
 from utils.sys_args import data_args,model_args
+from utils.app_modules.utils import *
+#  
+from utils.app_modules.presets import *
+from utils.app_modules.overwrites import *
 nltk.data.path = [os.path.join(os.path.dirname(__file__), "nltk_data")] + nltk.data.path
 
 # modification
@@ -49,7 +50,7 @@ if not os.path.exists(memory_dir):
 
 language = data_args.language
 if data_args.enable_forget_mechanism:
-    from memory_retrieval.forget_memory import LocalMemoryRetrieval
+    from memory_retrieval.forget_memory_new import LocalMemoryRetrieval
 else:
     from memory_retrieval.local_doc_qa import LocalMemoryRetrieval
 
@@ -165,15 +166,15 @@ def main():
     memory = json.loads(open(memory_dir,"r",encoding="utf-8").read())
     print('Please Enter Your Name:')
     user_name = input("\n用户名：")
-    print(memory.keys())
+    # print(memory.keys())
     if user_name in memory.keys():
-        if input('Would you like to summarize your memory?If yes, please enter "yes"') == "yes":
+        if input('Would you like to summarize your memory? If yes, please enter "yes"') == "yes":
             user_memory = summarize_memory_event_personality(data_args, memory, user_name)
     hello_msg,user_memory,memory,user_name,user_memory_index = enter_name(user_name,memory,local_memory_qa,data_args)
     print(hello_msg)
     # print('Would you like to summarize your memory?If yes, please enter "yes"')
     
-    print("欢迎使用 SiliconFriend模型，输入内容即可进行对话，clear 清空对话历史，stop 终止程序")
+    print("Welcome to use SiliconFriend model，please enter your question to start conversation，enter \"clear\" to clear conversation ，enter \"stop\" to stop program")
     while True:
         query = input(f"\n{user_name}：")
         if query.strip() == "stop":
@@ -181,7 +182,7 @@ def main():
         if query.strip() == "clear":
             history = []
             os.system(clear_command)
-            print("欢迎使用 SiliconFriend模型，输入内容即可进行对话，clear 清空对话历史，stop 终止程序")
+            print("Welcome to use SiliconFriend model，please enter your question to start conversation，enter \"clear\" to clear conversation ，enter \"stop\" to stop program")
             continue
         count = 0
         history_state, history, msg = predict_new(text=query,history=history,top_p=0.95,temperature=1,max_length_tokens=1024,max_context_length_tokens=200,user_name=user_name,user_memory=user_memory,user_memory_index=user_memory_index)

@@ -82,6 +82,6 @@ def save_local_memory(memory,b,user_name,data_args):
     if memory[user_name]['history'].get(date) is None:
         memory[user_name]['history'][date] = []
     # date = len(memory[user_name]['history'])
-    memory[user_name]['history'][date].append(b[-1])
+    memory[user_name]['history'][date].append({'query':b[-1][0],'response':b[-1][1]})
     json.dump(memory,open(memory_dir,"w",encoding="utf-8"),ensure_ascii=False)
     return memory

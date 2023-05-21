@@ -39,7 +39,8 @@ class JsonMemoryLoader(UnstructuredFileLoader):
                 memory_str = f'时间{date}的对话内容：' if self.language=='cn' else f'Conversation content on {date}:'
                 user_kw = '[|用户|]：' if self.language=='cn' else '[|User|]:'
                 ai_kw = '[|AI恋人|]：' if self.language=='cn' else '[|AI|]:'
-                for i,(query, response) in enumerate(content):
+                for i,(dialog) in enumerate(content):
+                    query, response = dialog['query'],dialog['response']
                     # memory_str += f'Memory: '
                     tmp_str = memory_str
                     tmp_str += f'{user_kw} {query.strip()}; '
@@ -108,8 +109,7 @@ def load_memory_file(filepath,user_name,language='cn'):
     # textsplitter = ChineseTextSplitter(pdf=False)
     # docs = loader.load_and_split(textsplitter,user_name)
     return docs
-
-
+ 
 
 def get_docs_with_score(docs_with_score):
     docs=[]

@@ -66,7 +66,9 @@ llm_client = LLMClientSimple(chatgpt_config)
 
 def summarize_content_prompt(content,user_name,boot_name,language='en'):
     prompt = '请总结以下的对话内容，尽可能精炼，提取对话的主题和关键信息。如果有多个关键事件，可以分点总结。对话内容：\n' if language=='cn' else 'Please summarize the following dialogue as concisely as possible, extracting the main themes and key information. If there are multiple key events, you may summarize them separately. Dialogue content:\n'
-    for query, response in content:
+    for dialog in content:
+        query = dialog['query']
+        response = dialog['response']
         # prompt += f"\n用户：{query.strip()}"
         # prompt += f"\nAI：{response.strip()}"
         prompt += f"\n{user_name}：{query.strip()}"
@@ -76,7 +78,8 @@ def summarize_content_prompt(content,user_name,boot_name,language='en'):
 
 def summarize_overall_prompt(content,language='en'):
     prompt = '请高度概括以下的事件，尽可能精炼，概括并保留其中核心的关键信息。概括事件：\n' if language=='cn' else "Please provide a highly concise summary of the following event, capturing the essential key information as succinctly as possible. Summarize the event:\n"
-    for date,summary in content:
+    for date,summary_dict in content:
+        summary = summary_dict['content']
         prompt += (f"\n时间{date}发生的事件为{summary.strip()}" if language=='cn' else f"At {date}, the events are {summary.strip()}")
     prompt += ('\n总结：' if language=='cn' else '\nSummarization：')
     return prompt
@@ -90,7 +93,9 @@ def summarize_overall_personality(content,language='en'):
 
 def summarize_person_prompt(content,user_name,boot_name,language):
     prompt = f'请根据以下的对话推测总结{user_name}的性格特点和心情，并根据你的推测制定回复策略。对话内容：\n' if language=='cn' else f"Based on the following dialogue, please summarize {user_name}'s personality traits and emotions, and devise response strategies based on your speculation. Dialogue content:\n"
-    for query, response in content:
+    for dialog in content:
+        query = dialog['query']
+        response = dialog['response']
         # prompt += f"\n用户：{query.strip()}"
         # prompt += f"\nAI：{response.strip()}"
         prompt += f"\n{user_name}：{query.strip()}"
@@ -126,7 +131,7 @@ def summarize_memory(memory_dir,name=None,language='cn'):
             person_prompt = summarize_person_prompt(content,user_name,boot_name,language)
             if his_flag:
                 his_summary = llm_client.generate_text_simple(prompt=hisprompt,prompt_num=gen_prompt_num,language=language)
-                memory[user_name]['summary'][date] = his_summary
+                memory[user_name]['summary'][date] = {'content':his_summary}
             if person_flag:
                 person_summary = llm_client.generate_text_simple(prompt=person_prompt,prompt_num=gen_prompt_num,language=language)
                 memory[user_name]['personality'][date] = person_summary
@@ -142,7 +147,7 @@ def summarize_memory(memory_dir,name=None,language='cn'):
     return memory
 
 if __name__ == '__main__':
-    summarize_memory('/home/t-qiga/azurewanjun/SiliconGirlfriend/memories/eng_memory_cases.json',language='en')
+    summarize_memory('../memories/eng_memory_cases.json',language='en')
 
 
                 

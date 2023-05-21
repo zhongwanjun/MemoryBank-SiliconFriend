@@ -33,7 +33,7 @@ def forgetting_curve(t, S):
     The higher the memory strength, the slower the rate of forgetting, 
     and the longer the information is retained.
     """
-    return math.exp(-t / S)
+    return math.exp(-t / 5*S)
 
     # # Example usage
     # t = 1  # Time elapsed since the information was learned (in days)
@@ -49,78 +49,26 @@ class MemoryForgetterLoader(UnstructuredFileLoader):
         self.memory_level = 3
         self.total_date = 30
         self.language = language
-        self.forget_rate = \
-        [dict([(i, forgetting_curve(i,1)) for i in range(self.total_date)]),
-        dict([(i, forgetting_curve(i,2)) for i in range(self.total_date)]),
-        dict([(i, forgetting_curve(i,3)) for i in range(self.total_date)])]
+        
         self.memory_bank = {}
-        self.user_memory = {'history':dict([(f'level_{i}', []) for i in range(self.memory_level)]),
-                            'summary':{},
-                            'overall_history':'',
-                            'overall_personality':''}
-
-    def _get_metadata(self, date: str) -> dict:
-        return {"source": date,'cur_level_date':date}
-    
+        
+   
     def _get_date_difference(self, date1: str, date2: str) -> int:
         date_format = "%Y-%m-%d"
         d1 = datetime.datetime.strptime(date1, date_format)
         d2 = datetime.datetime.strptime(date2, date_format)
         return (d2 - d1).days
 
-    def forget_memory(self, cur_date):
-        forget_f = open(self.file_path.replace('.json' , '_forget_context.txt'), 'w', encoding='utf-8')
-        for user in self.memory_bank.keys():
-            for i in range(self.memory_level):
-                if len(self.memory_bank[user]['history'][f'level_{i}']) == 0:
-                    continue
-                # Create a new list to store the memories after forgetting
-                new_memory_level = []
-                for memory in self.memory_bank[user]['history'][f'level_{i}']:
-                    source_date = memory['metadata']['cur_level_date']
-                    days_diff = self._get_date_difference(source_date, cur_date)
-                    # Check if the memory's age is within the range of the forget_rate dictionary
-                    if days_diff < self.total_date:
-                        # Calculate the probability of retaining the memory
-                        retention_probability = self.forget_rate[i].get(days_diff, 0)
-                        # Keep the memory with the retention_probability
-                        if random.random() < retention_probability:
-                            new_memory_level.append(memory)
-                        else:
-                            
-                            print('{user} Forgetted memory in {cur_date} : memory {memory}\n'.format(user=user,cur_date=cur_date,memory=memory['metadata']['source']))
-                            forget_f.write('{user} Forgetted memory in {cur_date} : memory {memory}\n'.format(user=user,cur_date=cur_date,memory=memory['metadata']['source']))
-                # Replace the current memory bank level with the new_memory_level
-                self.memory_bank[user]['history'][f'level_{i}'] = new_memory_level
      
-    def update_memory_when_searched(self, recalled,user,cur_date):
-        recalled_date = recalled.metadata['source']
-        recalled_level = recalled.metadata['memory_level']
-        # Find the memory in the memory_bank and its current level
-        recalled_memory = None
-        current_level = -1
-        memory_index = -1
-        for i,memory in enumerate(self.memory_bank[user]['history'][f'level_{recalled_level}']):
-            if memory['metadata']['source'] == recalled_date:
-                recalled_memory = copy.deepcopy(memory)
-                current_level = recalled_level
-                memory_index = i
-                break
-        
-        # If the memory is not found, return
-        if current_level == -1:
-            return
-
-        # Remove the memory from the current level
-        self.memory_bank[user]['history'][f'level_{current_level}'].pop(memory_index)
-        # self.memory_bank[user]['history'][f'level_{current_level}'].remove(recalled_memory)
-
-        # Update the memory's metadata with the new date
-        recalled_memory['metadata']['cur_level_date'] = cur_date
-
-        # Move the memory to a higher level in the memory_bank, if possible
-        new_level = current_level + 1 if current_level < self.memory_level-1 else self.memory_level-1
-        self.memory_bank[user]['history'][f'level_{new_level}'].append(recalled_memory)
+    def update_memory_when_searched(self, recalled_memos,user,cur_date):
+        for recalled in recalled_memos:
+            recalled_id = recalled.metadata['memory_id']
+            recalled_date = recalled_id.split('_')[1]
+            for i,memory in enumerate(self.memory_bank[user]['history'][recalled_date]):
+                if memory['memory_id'] == recalled_id:
+                    self.memory_bank[user]['history'][recalled_date][i]['memory_strength'] += 1
+                    self.memory_bank[user]['history'][recalled_date][i]['last_recall_date'] = cur_date
+                    break
     
     def write_memories(self, out_file):
         with open(out_file, "w", encoding="utf-8") as f:
@@ -132,35 +80,8 @@ class MemoryForgetterLoader(UnstructuredFileLoader):
         with open(memory_file, "r", encoding="utf-8") as f:
             self.memory_bank = json.load(f)
 
-    def get_docs(self,name):
+    def initial_load_forget_and_save(self,name,now_date):
         docs = []
-        for i in range(self.memory_level):
-            for doc in self.memory_bank[name]['history'][f'level_{i}']:
-                doc['metadata']['memory_level'] = i
-                docs.append(Document(**doc))
-        # print(docs)
-        # exit()
-        return docs
-
-    def load_update_and_split(
-        self, text_splitter: Optional[TextSplitter] = None,name='',cur_date=''
-    ) -> List[Document]:
-        """Load documents and split into chunks."""
-        if text_splitter is None:
-            _text_splitter: TextSplitter = RecursiveCharacterTextSplitter()
-        else:
-            _text_splitter = text_splitter
-        if not cur_date:
-            cur_date = datetime.date.today().strftime("%Y-%m-%d")
-        # self.memory_bank = json.load(open(self.filepath.replace('.json' , '_forget_format.json'), "r", encoding="utf-8"))
-        # self.load_memories(self.filepath.replace('.json' , '_forget_format.json'))
-        self.forget_memory(cur_date=cur_date)
-        docs = self.get_docs(name=name)
-        results = _text_splitter.split_documents(docs)
-        # print(results)
-        return results
-    
-    def initial_load_and_save(self,name):
         with open(self.filepath, "r", encoding="utf-8") as f:
             memories = json.load(f)
             for user_name, user_memory in memories.items():
@@ -168,38 +89,64 @@ class MemoryForgetterLoader(UnstructuredFileLoader):
                 #     continue
                 if 'history' not in user_memory.keys():
                     continue
-
-                self.memory_bank[user_name] = copy.deepcopy(self.user_memory)
-                if 'summary' in user_memory.keys():
-                    self.memory_bank[user_name]['summary'] = user_memory['summary']
-                if 'overall_history' in user_memory.keys():
-                    self.memory_bank[user_name]['overall_history'] = user_memory['overall_history']
-                if 'overall_personality' in user_memory.keys():
-                    self.memory_bank[user_name]['overall_personality'] = user_memory['overall_personality']
-
+                self.memory_bank[user_name] = copy.deepcopy(user_memory)
                 for date, content in user_memory['history'].items():
-                    metadata = self._get_metadata(date)
-                    memory_str = f'时间{date}的对话内容：' if self.language=='cn' else f'Conversation content on {date}:'
-                    user_kw = '[|用户|]：' if self.language=='cn' else '[|User|]:'
-                    ai_kw = '[|AI恋人|]：' if self.language=='cn' else '[|AI|]:'
-                    for query, response in content:
+                     memory_str = f'时间{date}的对话内容：' if self.language=='cn' else f'Conversation content on {date}:'
+                     user_kw = '[|用户|]：' if self.language=='cn' else '[|User|]:'
+                     ai_kw = '[|AI伴侣|]：' if self.language=='cn' else '[|AI|]:'
+                     forget_ids = []
+                     for i,dialog in enumerate(content):
                         tmp_str = memory_str
+                        if not isinstance(dialog,dict):
+                            dialog = {'query':dialog[0],'response':dialog[1]}
+                            self.memory_bank[user_name]['history'][date][i] = dialog
+
+                        query = dialog['query']
+                        response = dialog['response']
+                        memory_strength = dialog.get('memory_strength',1)
+                        last_recall_date = dialog.get('last_recall_date',date)
+                        memory_id = dialog.get('memory_id',f'{user_name}_{date}_{i}')
                         tmp_str += f'{user_kw} {query.strip()}; '
                         tmp_str += f'{ai_kw} {response.strip()}'
-                        self.memory_bank[user_name]['history']['level_0'].append({'page_content':tmp_str,'metadata':metadata})
-                    # memory_str += '\n'
-                    if 'summary' in user_memory.keys():
-                        if date in user_memory['summary'].keys():
-                            summary = f'时间{date}的对话总结为：{user_memory["summary"][date]}' if self.language=='cn' else f'The summary of the conversation on {date} is: {user_memory["summary"][date]}'
-                            self.memory_bank[user_name]['history']['level_0'].append({'page_content':summary,'metadata':metadata})
-                        # Document(page_content=memory_str, metadata=metadata)) 
-        self.write_memories(self.filepath.replace('.json' , '_forget_format.json'))
+                        metadata = {'memory_strength':memory_strength,
+                                    'memory_id':memory_id,'last_recall_date':last_recall_date,"source": memory_id}
+                        
+                        self.memory_bank[user_name]['history'][date][i].update(metadata)
+                        days_diff = self._get_date_difference(last_recall_date, now_date)
+                        retention_probability = forgetting_curve(days_diff,memory_strength)
+                        print(days_diff,memory_strength,retention_probability)
+                        # Keep the memory with the retention_probability
+                        if random.random() > retention_probability:
+                            forget_ids.append(i)
+                            
+                        else:
+                            docs.append(Document(page_content=tmp_str,metadata=metadata))
+                     print(user_name,date,forget_ids)
+                     if len(forget_ids) > 0:
+                         forget_ids.sort(reverse=True)
+                         for idd in forget_ids:
+                             self.memory_bank[user_name]['history'][date].pop(idd)
+                     if len(self.memory_bank[user_name]['history'][date])==0:
+                            self.memory_bank[user_name]['history'].pop(date)
+                            self.memory_bank[user_name]['summary'].pop(date)
+                     if 'summary' in self.memory_bank[user_name].keys():
+                        if date in self.memory_bank[user_name]['summary'].keys():
+                            if not isinstance(self.memory_bank[user_name]["summary"][date],dict):
+                                self.memory_bank[user_name]["summary"][date] = {'content':self.memory_bank[user_name]["summary"][date]}
+                            summary_str = self.memory_bank[user_name]["summary"][date]["content"] if isinstance(self.memory_bank[user_name]["summary"][date],dict) else self.memory_bank[user_name]["summary"][date]
+                            summary = f'时间{date}的对话总结为：{summary_str}' if self.language=='cn' else f'The summary of the conversation on {date} is: {summary_str}'
+                            memory_strength = self.memory_bank[user_name]['summary'][date].get('memory_strength',1) 
+                            last_recall_date = self.memory_bank[user_name]["summary"][date].get('last_recall_date',date) 
+                            metadata = {'memory_strength':memory_strength,
+                                    'memory_id':f'{user_name}_{date}_summary','last_recall_date':last_recall_date,"source":f'{user_name}_{date}_summary'}
+                            if isinstance(self.memory_bank[user_name]["summary"][date],dict):    
+                                self.memory_bank[user_name]['summary'][date].update(metadata)
+                            else:
+                                self.memory_bank[user_name]['summary'][date] = {'content':self.memory_bank[user_name]['summary'][date],**metadata}
+                            docs.append(Document(page_content=summary,metadata=metadata))
+        self.write_memories(self.filepath) 
+        return docs
 
-    def load_forget_file(self):
-        forget_file = self.filepath.replace('.json' , '_forget_format.json')
-        with open(forget_file, "r", encoding="utf-8") as f:
-            self.memory_bank = json.load(f)
-        return 
     
 def get_docs_with_score(docs_with_score):
     docs=[]
@@ -227,13 +174,12 @@ def load_memory_file(filepath,user_name,cur_date='',language='cn'):
     textsplitter = ChineseTextSplitter(pdf=False)
     # if not os.path.exists(filepath.replace('.json','_forget_format.json')):
     print('write to ',os.path.exists(filepath.replace('.json','_forget_format.json')))
-    
+    if not cur_date:
+        cur_date = datetime.date.today().strftime("%Y-%m-%d")
+     
     # if not os.path.exists(os.path.exists(filepath.replace('.json','_forget_format.json'))):
-    memory_loader.initial_load_and_save(name=user_name)
-    # else:
-    #     memory_loader.load_forget_file()
-
-    docs = memory_loader.load_update_and_split(textsplitter,name=user_name,cur_date=cur_date)
+    docs = memory_loader.initial_load_forget_and_save(user_name,cur_date)
+    docs = textsplitter.split_documents(docs)
     
     return docs, memory_loader 
     
@@ -394,9 +340,8 @@ class LocalMemoryRetrieval:
         dates = []
         cur_date = cur_date if cur_date else datetime.date.today().strftime("%Y-%m-%d") 
         for doc in related_docs:
-            self.memory_loader.update_memory_when_searched(doc,user=self.user,cur_date=cur_date)
             #saving updated memory
-            self.save_updated_memory()
+            
             doc.page_content = doc.page_content.replace(f'时间{doc.metadata["source"]}的对话内容：','').strip()
             if doc.metadata["source"] != pre_date:
                 # date_docs.append(f'在时间{doc.metadata["source"]}的回忆内容是：{doc.page_content}')
@@ -405,10 +350,12 @@ class LocalMemoryRetrieval:
                 dates.append(pre_date)
             else:
                 date_docs[-1] += f'\n{doc.page_content}' 
+        self.memory_loader.update_memory_when_searched(related_docs,user=self.user,cur_date=cur_date)
+        self.save_updated_memory()
         # memory_contents = [doc.page_content for doc in related_docs]
         # memory_contents = [f'在时间'+doc.metadata['source']+'的回忆内容是：'+doc.page_content for doc in related_docs]
         return date_docs, ', '.join(dates) 
     
     def save_updated_memory(self):
-        self.memory_loader.write_memories(self.memory_path.replace('.json' , '_forget_format.json'))
+        self.memory_loader.write_memories(self.memory_path)#.replace('.json','_forget_format.json'))
     
