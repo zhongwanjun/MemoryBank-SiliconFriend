@@ -4,8 +4,7 @@ MemoryBank是为大型语言模型（LLM）设计的记忆机制。它允许模�
 
 ![](resources/framework.png)
 
-SilconFriend 是一款集成了MemoryBank的双语AI聊天陪伴机器人。通过在大量心理对话数据进行LoRA微调，SiliconFriend在互动中展现了出优秀的共情能力。我们进行了一系列实验，包括对真实用户对话进行的定性分析和通过ChatGPT生成的模拟对话进行的定量分析。实验结果显示，搭载了MemoryBank的SiliconFriend展示出了出色的长期陪伴能力，它能够提供共情性回应、回忆相关记忆，并理解用户的个性。所有的实验都在Tesla A100 80GB GPU和cuda 11.7环境下完成。SiliconFriend分别提供基于ChatGLM和BELLE两个版本的[LoRA 模型](https://github.com/zhongwanjun/MemoryBank-SiliconFriend/releases/tag/LoRA_checkpoint)。
-
+SilconFriend 是一款集成了MemoryBank的双语AI聊天陪伴机器人。通过在大量心理对话数据进行LoRA微调，SiliconFriend在互动中展现了出优秀的共情能力。我们进行了一系列实验，包括对真实用户对话进行的定性分析和通过ChatGPT生成的模拟对话进行的定量分析。实验结果显示，搭载了MemoryBank的SiliconFriend展示出了出色的长期陪伴能力，它能够提供共情性回应、回忆相关记忆，并理解用户的个性。
 ![](resources/chat_comparison.png)
 
 Read this in [English](README_en.md).
@@ -14,13 +13,40 @@ Read this in [English](README_en.md).
 
 ### 环境安装
 
-使用pip安装依赖: `pip install -r requirement.txt`.
+使用pip安装依赖: `pip install -r requirement.txt`，所有的实验都在Tesla A100 80GB GPU和cuda 11.7环境下完成。
+
+### 模型安装
+SiliconFriend分别提供基于ChatGLM和BELLE两个版本的[LoRA 模型](https://github.com/zhongwanjun/MemoryBank-SiliconFriend/releases/tag/LoRA_checkpoint)。在下载模型前，请确保你已经安装了[Git LFS](https://docs.github.com/zh/repositories/working-with-files/managing-large-files/installing-git-large-file-storage).
+
+#### 下载SiliconFriend(ChatGLM)
+首先下载ChatGLM模型,再下载它的LoRA模型。
+
+```shell
+cd model
+git clone https://huggingface.co/THUDM/chatglm-6b
+git clone https://github.com/zhongwanjun/MemoryBank-SiliconFriend/releases/download/LoRA_checkpoint/ChatGLM-LoRA-checkpoint.zip
+unzip ChatGLM-LoRA-checkpoint.zip
+rm ChatGLM-LoRA-checkpoint.zip
+cd ..
+```
+
+#### 下载SiliconFriend(BELLE)
+首先下载BELLE模型,再下载它的LoRA模型。
+
+```shell
+cd model
+git clone https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-enc
+git clone https://github.com/zhongwanjun/MemoryBank-SiliconFriend/releases/download/LoRA_checkpoint/BELLE-LoRA-checkpoint.zip
+unzip BELLE-LoRA-checkpoint.zip
+rm BELLE-LoRA-checkpoint.zip
+cd ..
+```
 
 ### Demo
 
 #### SiliconFriend(ChatGLM) 网页版 Demo
 
-设置[SiliconFriend-ChatGLM/launch.sh](SiliconFriend-ChatGLM/launch.sh)中的API KEY 'OPENAI_API_KEY' 和LoRA模型 'adapter_model'，并运行仓库中的[SiliconFriend-ChatGLM/launch.sh](SiliconFriend-ChatGLM/launch.sh):
+设置[SiliconFriend-ChatGLM/launch.sh](SiliconFriend-ChatGLM/launch.sh)中的API KEY 'OPENAI_API_KEY' 和LoRA模型 'adapter_model'。当运行模型时，英文设置 '--language=en'而中文设置 '--language=cn'。运行仓库中的[SiliconFriend-ChatGLM/launch.sh](SiliconFriend-ChatGLM/launch.sh):
 
 ```shell
 ./SiliconFriend-ChatGLM/launch.sh
@@ -28,14 +54,14 @@ Read this in [English](README_en.md).
 
 #### SiliconFriend(ChatGLM) 命令行 Demo
 
-设置[SiliconFriend-ChatGLM/launch_cmd.sh](SiliconFriend-ChatGLM/launch_cmd.sh)中的API KEY 'OPENAI_API_KEY' 和LoRA模型 'adapter_model'， 并运行仓库中的[SiliconFriend-ChatGLM/launch_cmd.sh](SiliconFriend-ChatGLM/launch_cmd.sh):
+设置[SiliconFriend-ChatGLM/launch_cmd.sh](SiliconFriend-ChatGLM/launch_cmd.sh)中的API KEY 'OPENAI_API_KEY' 和LoRA模型 'adapter_model'。当运行模型时，英文设置 '--language=en'而中文设置 '--language=cn'。运行仓库中的[SiliconFriend-ChatGLM/launch_cmd.sh](SiliconFriend-ChatGLM/launch_cmd.sh):
 
 ```shell
 ./SiliconFriend-ChatGLM/launch_cmd.sh
 ```
 #### SiliconFriend(ChatGPT) 网页版 Demo
 
-设置[SiliconFriend-ChatGLM/launch_cmd.sh](SiliconFriend-ChatGLM/launch_cmd.sh)中的API KEY 'OPENAI_API_KEY'， 并运行仓库中的 [SiliconFriend-ChatGPT/launch.sh](SiliconFriend-ChatGPT/launch.sh):
+设置[SiliconFriend-ChatGLM/launch_cmd.sh](SiliconFriend-ChatGLM/launch_cmd.sh)中的API KEY 'OPENAI_API_KEY'。当运行模型时，英文设置 '--language=en'而中文设置 '--language=cn'。运行仓库中的 [SiliconFriend-ChatGPT/launch.sh](SiliconFriend-ChatGPT/launch.sh):
 
 ```shell
 ./SiliconFriend-ChatGPT/launch.sh
