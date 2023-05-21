@@ -1,3 +1,5 @@
-python cli_ptuning_memory_search_llamaindex.py \
+export OPENAI_API_KEY=
+python cli_llamaindex.py \
     --memory_basic_dir ../memories \
-    --memory_file update_memory.json
+    --memory_file update_memory.json \
+    --language en

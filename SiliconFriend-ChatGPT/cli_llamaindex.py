@@ -76,15 +76,22 @@ def chatgpt_chat(prompt,system,history,gpt_config,api_index=0):
             try:
                 request = copy.deepcopy(gpt_config)
                 # print(prompt)
-                message = [
-                {"role": "system", "content": system},
-                {"role": "user", "content": "Please answer my question according to {personality}"},
-                {"role": "assistant", "content": f"Sure! I will give you warm help and company with you!"}]
+                if data_args.language=='en':
+                    message = [
+                    {"role": "system", "content": system.strip()},
+                    {"role": "user", "content": "Hi!"},
+                    {"role": "assistant", "content": f"Hi! I'm {boot_actual_name}! I will give you warm companion!"}]
+                else:
+                     message = [
+                    {"role": "system", "content": system.strip()},
+                    {"role": "user", "content": "你好！"},
+                    {"role": "assistant", "content": f"你好，我是{boot_actual_name}！我会给你温暖的陪伴！"}]
                 for query, response in history:
                     message.append({"role": "user", "content": query})
                     message.append({"role": "assistant", "content": response})
                 message.append({"role":"user","content": f"{prompt}"})
                 # print(request)
+                # print(message)
                 response = openai.ChatCompletion.create(
                     **request, messages=message)
                 # print(prompt)
@@ -121,7 +128,7 @@ def predict_new(
 ):
     if text == "":
         return history, history, "Empty context."
-    system_prompt,related_memo = build_prompt_with_search_memory_llamaindex(history,text,user_memory,user_name,user_memory_index,service_context=service_context,api_index=api_index,meta_prompt=meta_prompt,new_user_meta_prompt=new_user_meta_prompt,data_args=data_args,boot_actual_name=boot_actual_name)
+    system_prompt,related_memo = build_prompt_with_search_memory_llamaindex(history,text,user_memory,user_name,user_memory_index,service_context=service_context,api_keys=api_keys,api_index=api_index,meta_prompt=meta_prompt,new_user_meta_prompt=new_user_meta_prompt,data_args=data_args,boot_actual_name=boot_actual_name)
     chatgpt_config = {"model": "gpt-3.5-turbo",
         "temperature": temperature,
         "max_tokens": max_length_tokens,
@@ -131,8 +138,8 @@ def predict_new(
         'n':1
         }
     
-    if len(history) > 8:
-        history = [history[0]]+history[-7:]
+    if len(history) > data_args.max_history:
+        history = history[data_args.max_history:]
     # print(history)
     response = chatgpt_chat(prompt=text,system=system_prompt,history=history,gpt_config=chatgpt_config,api_index=api_index)
     result = response
