@@ -6,6 +6,7 @@ from transformers import (
     AutoTokenizer,
     set_seed,
 )
+from transformers import GenerationConfig, LlamaForCausalLM, LlamaTokenizer
 from peft import PeftModel
 import torch, os
 
@@ -50,6 +51,57 @@ def load_prefix_chatglm_tokenizer_and_model(model_path,ptuning_checkpoint):
         model = model.float()
     return tokenizer, model
 
+def load_belle_tokenizer_and_model(base_model, adapter_model, load_8bit=False):
+    if torch.cuda.is_available():
+        device = "cuda"
+    else:
+        device = "cpu"
+
+    try:
+        if torch.backends.mps.is_available():
+            device = "mps"
+    except:  # noqa: E722
+        pass
+    tokenizer = LlamaTokenizer.from_pretrained(base_model)
+    if device == "cuda":
+        model = LlamaForCausalLM.from_pretrained(
+            base_model,
+            load_in_8bit=load_8bit,
+            torch_dtype=torch.float16,
+            device_map="auto",
+        )
+        model = PeftModel.from_pretrained(
+            model,
+            adapter_model,
+            torch_dtype=torch.float16,
+        )
+    elif device == "mps":
+        model = LlamaForCausalLM.from_pretrained(
+            base_model,
+            device_map={"": device},
+            torch_dtype=torch.float16,
+        )
+        model = PeftModel.from_pretrained(
+            model,
+            adapter_model,
+            device_map={"": device},
+            torch_dtype=torch.float16,
+        )
+    else:
+        model = LlamaForCausalLM.from_pretrained(
+            base_model, device_map={"": device}, low_cpu_mem_usage=True
+        )
+        model = PeftModel.from_pretrained(
+            model,
+            adapter_model,
+            device_map={"": device},
+        )
+
+    if not load_8bit and device != "cpu":
+        model.half()  # seems to fix bugs for some users.
+
+    model.eval()
+    return tokenizer, model
 class InvalidScoreLogitsProcessor(LogitsProcessor):
     def __call__(self, input_ids: torch.LongTensor, scores: torch.FloatTensor) -> torch.FloatTensor:
         if torch.isnan(scores).any() or torch.isinf(scores).any():

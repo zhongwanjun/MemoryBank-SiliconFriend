@@ -10,6 +10,10 @@ class DataArguments:
     enable_forget_mechanism: bool = field(default=False)
 @dataclass
 class ModelArguments:
+    model_type: str = field(
+        default="chatglm",
+        metadata={"help": "model type: chatglm / belle"},
+    )
     base_model: str = field(
         default="THUDM/chatglm-6b",
         metadata={"help": "Path to pretrained model or model identifier from huggingface.co/models"},

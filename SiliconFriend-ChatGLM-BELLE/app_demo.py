@@ -12,7 +12,7 @@ sys.path.append(prompt_path)
 sys.path.append(bank_path)
 from utils.prompt_utils import *
 from utils.memory_utils import enter_name, summarize_memory_event_personality, save_local_memory
-from utils.model_utils import load_chatglm_tokenizer_and_model,load_lora_chatglm_tokenizer_and_model,load_prefix_chatglm_tokenizer_and_model, InvalidScoreLogitsProcessor
+from utils.model_utils import load_chatglm_tokenizer_and_model,load_belle_tokenizer_and_model,load_lora_chatglm_tokenizer_and_model,load_prefix_chatglm_tokenizer_and_model, InvalidScoreLogitsProcessor
 from transformers.generation.utils import LogitsProcessorList
 nltk.data.path = [os.path.join(os.path.dirname(__file__), "nltk_data")] + nltk.data.path
 from memory_retrieval.configs.model_config import *
@@ -50,7 +50,11 @@ boot_actual_name = boot_actual_name_dict[language]
 global memory
 memory = json.loads(open(memory_dir,"r",encoding="utf-8").read())
 # tokenizer, model= load_prefix_chatglm_tokenizer_and_model(base_model,adapter_model)
-tokenizer, model= load_lora_chatglm_tokenizer_and_model(model_args.base_model,model_args.adapter_model)
+if model_args.model_type=='chatglm':
+    tokenizer, model= load_lora_chatglm_tokenizer_and_model(model_args.base_model,model_args.adapter_model)
+elif model_args.model_type=='belle':
+    tokenizer, model= load_belle_tokenizer_and_model(model_args.base_model,model_args.adapter_model)
+
 # tokenizer, model= load_chatglm_tokenizer_and_model(base_model)
 # tokenizer, model, device = load_tokenizer_full_model(base_model, load_8bit=load_8bit)
 # )
@@ -90,7 +94,8 @@ def chat(model, tokenizer, query: str, history: List[Tuple[str, str]] = None, ma
     outputs = model.generate(**inputs, **gen_kwargs)
     outputs = outputs.tolist()[0][len(inputs["input_ids"][0]):]
     response = tokenizer.decode(outputs)
-    response = model.process_response(response)
+    if model_args.model_type == 'chatglm':
+        response = model.process_response(response)
     response = clean_result(response,prompt,stop_words=[user_keyword])
     return response
 
