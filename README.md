@@ -1,6 +1,6 @@
 ## 介绍
 
-MemoryBank是为大型语言模型（LLM）设计的创新记忆机制。它允许模型访问相关记忆，通过不断更新记忆实现演化，并通过综合过去的互动来适应用户个性。借鉴艾宾浩斯遗忘曲线理论，MemoryBank采用了一种模拟人类记忆行为的独特更新机制。这使得AI可以根据记忆的重要性和时间推移，有选择地遗忘或强化记忆，从而打造一个非常自然的记忆系统。MemoryBank可以轻松地与闭源模型（如[ChatGPT](https://chat.openai.com)）和开源模型（如[ChatGLM](https://github.com/THUDM/ChatGLM-6B) 和 [BELLE](https://github.com/LianjiaTech/BELLE)进行集成。 
+MemoryBank是为大型语言模型（LLM）设计的记忆机制。它允许模型访问相关记忆，通过不断更新记忆实现演化，并通过综合过去的互动来适应用户个性。受艾宾浩斯遗忘曲线理论启发，MemoryBank采用了一种模拟人类记忆行为的独特更新机制。这使得AI可以根据记忆的重要性和时间推移，有选择地遗忘或强化记忆，从而打造一个自然的记忆系统。MemoryBank可以轻松地与闭源模型（如[ChatGPT](https://chat.openai.com)）和开源模型（如[ChatGLM](https://github.com/THUDM/ChatGLM-6B) 和 [BELLE](https://github.com/LianjiaTech/BELLE)进行集成。 
 
 ![](resources/framework.png)
 
