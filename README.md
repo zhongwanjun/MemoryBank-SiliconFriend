@@ -19,7 +19,7 @@ Read this in [English](README_en.md).
 SiliconFriend分别提供基于ChatGLM和BELLE两个版本的[LoRA 模型](https://github.com/zhongwanjun/MemoryBank-SiliconFriend/releases/tag/LoRA_checkpoint)。在下载模型前，请确保你已经安装了[Git LFS](https://docs.github.com/zh/repositories/working-with-files/managing-large-files/installing-git-large-file-storage).
 
 #### 下载SiliconFriend(ChatGLM)
-首先使用[ChatGLM](https://huggingface.co/THUDM/chatglm-6b)模型,再下载它的LoRA模型。
+首先使用[ChatGLM](https://huggingface.co/THUDM/chatglm-6b)模型,再下载它的[LoRA模型](https://github.com/zhongwanjun/MemoryBank-SiliconFriend/releases/download/LoRA_checkpoint/ChatGLM-LoRA-checkpoint.zip)。
 
 ```shell
 cd model
@@ -30,7 +30,7 @@ cd ..
 ```
 
 #### 下载SiliconFriend(BELLE)
-首先下载BELLE模型,再下载它的LoRA模型。
+首先下载[BELLE](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-enc)模型,再下载它的[LoRA模型](https://github.com/zhongwanjun/MemoryBank-SiliconFriend/releases/download/LoRA_checkpoint/BELLE-LoRA-checkpoint.zip)。
 
 ```shell
 cd model
