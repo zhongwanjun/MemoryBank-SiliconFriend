@@ -6,8 +6,8 @@ import time
 import gradio as gr
 import nltk
 import torch
-prompt_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../')
-bank_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../memory_bank')
+prompt_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../')
+bank_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../memory_bank')
 sys.path.append(prompt_path)
 sys.path.append(bank_path)
 from utils.prompt_utils import *
