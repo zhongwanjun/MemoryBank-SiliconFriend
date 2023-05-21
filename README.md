@@ -4,9 +4,11 @@ MemoryBank是为大型语言模型（LLM）设计的记忆机制。它允许模�
 
 ![](resources/framework.png)
 
-SilconFriend 是一款集成了MemoryBank的双语AI聊天陪伴机器人。通过在大量心理对话数据进行LoRA微调，SiliconFriend在互动中展现了出优秀的共情能力。我们进行了一系列实验，包括对真实用户对话进行的定性分析和通过ChatGPT生成的模拟对话进行的定量分析。实验结果显示，搭载了MemoryBank的SiliconFriend展示出了出色的长期陪伴能力，它能够提供共情性回应、回忆相关记忆，并理解用户的个性。所有的实验都在Tesla A100 80GB GPU和cuda 11.7环境下完成。SiliconFriend分别提供基于ChatGLM和BWELLE两个版本的[LoRA 模型](https://github.com/zhongwanjun/MemoryBank-SiliconFriend/releases/tag/LoRA_checkpoint)。
+SilconFriend 是一款集成了MemoryBank的双语AI聊天陪伴机器人。通过在大量心理对话数据进行LoRA微调，SiliconFriend在互动中展现了出优秀的共情能力。我们进行了一系列实验，包括对真实用户对话进行的定性分析和通过ChatGPT生成的模拟对话进行的定量分析。实验结果显示，搭载了MemoryBank的SiliconFriend展示出了出色的长期陪伴能力，它能够提供共情性回应、回忆相关记忆，并理解用户的个性。所有的实验都在Tesla A100 80GB GPU和cuda 11.7环境下完成。SiliconFriend分别提供基于ChatGLM和BELLE两个版本的[LoRA 模型](https://github.com/zhongwanjun/MemoryBank-SiliconFriend/releases/tag/LoRA_checkpoint)。
 
 ![](resources/chat_comparison.png)
+
+Read this in [English](README_en.md).
 
 ## 使用方式
 
