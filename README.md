@@ -33,11 +33,10 @@ cd ..
 ```
 
 #### 下载SiliconFriend(BELLE)
-首先下载[BELLE](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-enc)模型,再下载它的[LoRA模型](https://github.com/zhongwanjun/MemoryBank-SiliconFriend/releases/download/LoRA_checkpoint/BELLE-LoRA-checkpoint.zip)。
+首先使用[BELLE](https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-enc)模型,再下载它的[LoRA模型](https://github.com/zhongwanjun/MemoryBank-SiliconFriend/releases/download/LoRA_checkpoint/BELLE-LoRA-checkpoint.zip)。
 
 ```shell
 cd model
-git clone https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-enc
 git clone https://github.com/zhongwanjun/MemoryBank-SiliconFriend/releases/download/LoRA_checkpoint/BELLE-LoRA-checkpoint.zip
 unzip BELLE-LoRA-checkpoint.zip
 rm BELLE-LoRA-checkpoint.zip
