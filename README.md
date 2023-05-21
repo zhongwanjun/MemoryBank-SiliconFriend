@@ -75,7 +75,7 @@ bash launch_belle_cmd.sh
 
 #### SiliconFriend(ChatGPT) 网页版 Demo
 
-设置[SiliconFriend-ChatGLM/launch_cmd.sh](SiliconFriend-ChatGLM/launch_cmd.sh)中的API KEY 'OPENAI_API_KEY'。当运行模型时，英文设置 '--language=en'而中文设置 '--language=cn'。运行仓库中的 [SiliconFriend-ChatGPT/launch.sh](SiliconFriend-ChatGPT/launch.sh):
+设置[SiliconFriend-ChatGPT/launch.sh](SiliconFriend-ChatGPT/launch.sh)中的API KEY 'OPENAI_API_KEY'。当运行模型时，英文设置 '--language=en'而中文设置 '--language=cn'。运行仓库中的 [SiliconFriend-ChatGPT/launch.sh](SiliconFriend-ChatGPT/launch.sh):
 
 ```shell
 ./SiliconFriend-ChatGPT/launch.sh

@@ -19,11 +19,10 @@ SiliconFriend offers two [LoRA checkpoints](https://github.com/zhongwanjun/Memor
 Before downloading models, please ensure that you have installed[Git LFS](https://docs.github.com/zh/repositories/working-with-files/managing-large-files/installing-git-large-file-storage).
 #### Download SiliconFriend(ChatGLM)
 
-Download ChatGLM model at first, and then download the LoRA Model.
+Use [ChatGLM](https://github.com/THUDM/ChatGLM-6B) model at first, and then download the [LoRA Model](https://github.com/zhongwanjun/MemoryBank-SiliconFriend/releases/download/LoRA_checkpoint/ChatGLM-LoRA-checkpoint.zip).
 
 ```shell
 cd model
-git clone https://huggingface.co/THUDM/chatglm-6b
 git clone https://github.com/zhongwanjun/MemoryBank-SiliconFriend/releases/download/LoRA_checkpoint/ChatGLM-LoRA-checkpoint.zip
 unzip ChatGLM-LoRA-checkpoint.zip
 rm ChatGLM-LoRA-checkpoint.zip
@@ -32,11 +31,10 @@ cd ..
 
 #### Download SiliconFriend(BELLE)
 
-Download BELLE model at first, and then download the LoRA Model.
+Use [BELLE](https://github.com/LianjiaTech/BELLE) model at first, and then download the [LoRA Model](https://github.com/zhongwanjun/MemoryBank-SiliconFriend/releases/download/LoRA_checkpoint/BELLE-LoRA-checkpoint.zip).
 
 ```shell
 cd model
-git clone https://huggingface.co/BelleGroup/BELLE-LLaMA-7B-2M-enc
 git clone https://github.com/zhongwanjun/MemoryBank-SiliconFriend/releases/download/LoRA_checkpoint/BELLE-LoRA-checkpoint.zip
 unzip BELLE-LoRA-checkpoint.zip
 rm BELLE-LoRA-checkpoint.zip
@@ -44,23 +42,36 @@ cd ..
 ```
 
 ### Usage
-
+```
+export OPENAI_API_KEY=YOUR_API_KEY
+(You should modify the OPENAI_API_KEY (used for memory summarization and ChatGPT-based dialog))
+```
 #### SiliconFriend(ChatGLM) Web Demo
 
-Fill in 'OPENAI_API_KEY' and 'adapter_model' in [SiliconFriend-ChatGLM/launch.sh](SiliconFriend-ChatGLM/launch.sh). When running the bash, use the flag '--language=en' for English language and '--language=cn' for Chinese language. And run [SiliconFriend-ChatGLM/launch.sh](SiliconFriend-ChatGLM/launch.sh) in the repo:
+Fill in 'OPENAI_API_KEY' and 'adapter_model' in [SiliconFriend-ChatGLM-BELLE/launch_chatglm_app.sh](SiliconFriend-ChatGLM-BELLE/launch_chatglm_app.sh). When running the bash, use the flag '--language=en' for English language and '--language=cn' for Chinese language. And run [SiliconFriend-ChatGLM-BELLE/launch_chatglm_app.sh](SiliconFriend-ChatGLM-BELLE/launch_chatglm_app.sh) in the repo:
 
 ```shell
-./SiliconFriend-ChatGLM/launch.sh
+cd ./SiliconFriend-ChatGLM-BELLE
+bash launch_chatglm_cmd.sh
 ```
 
 #### SiliconFriend(ChatGLM) CLI Demo
 
-Fill in 'OPENAI_API_KEY' and 'adapter_model' in [SiliconFriend-ChatGLM/launch_cmd.sh](SiliconFriend-ChatGLM/launch_cmd.sh). When running the bash, use the flag '--language=en' for English language and '--language=cn' for Chinese language. And run [SiliconFriend-ChatGLM/launch_cmd.sh](SiliconFriend-ChatGLM/launch_cmd.sh) in the repo:
+Fill in 'OPENAI_API_KEY' and 'adapter_model' in [SiliconFriend-ChatGLM-BELLE//launch_chatglm_cmd.sh](SiliconFriend-ChatGLM-BELLE/launch_chatglm_cmd.sh). When running the bash, use the flag '--language=en' for English language and '--language=cn' for Chinese language. And run [SiliconFriend-ChatGLM-BELLE/launch_chatglm_cmd.sh](SiliconFriend-ChatGLM-BELLE/launch_chatglm_cmd.sh) in the repo:
 
 ```shell
-./SiliconFriend-ChatGLM/launch_cmd.sh
+cd ./SiliconFriend-ChatGLM-BELLE
+bash launch_chatglm_cmd.sh
 ```
 
+#### SiliconFriend(BELLE) 命令行 Demo
+
+Fill in 'OPENAI_API_KEY' and 'adapter_model' in [SiliconFriend-ChatGLM-BELLE/launch_belle_cmd.sh](SiliconFriend-ChatGLM-BELLE/launch_belle_cmd.sh).  When running the bash, use the flag '--language=en' for English language and '--language=cn' for Chinese language. And run [SiliconFriend-ChatGLM-BELLE/launch_belle_cmd.sh](SiliconFriend-ChatGLM-BELLE/launch_belle_cmd.sh) in this repo:
+
+```shell
+cd ./SiliconFriend-ChatGLM-BELLE
+bash launch_belle_cmd.sh
+```
 #### SiliconFriend(ChatGPT) Web Demo
 
 Fill in 'OPENAI_API_KEY' in [SiliconFriend-ChatGPT/launch.sh](SiliconFriend-ChatGPT/launch.sh).When running the bash, use the flag '--language=en' for English language and '--language=cn' for Chinese language. And run [SiliconFriend-ChatGPT/launch.sh](SiliconFriend-ChatGPT/launch.sh) in the repo:
@@ -81,4 +92,5 @@ If you find our work useful, please consider citing the following papers:
   journal={arXiv preprint arXiv:2305.10250},
   year={2023}
 }
+
 ```
