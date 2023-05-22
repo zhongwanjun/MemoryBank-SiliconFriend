@@ -81,6 +81,15 @@ bash launch_belle_cmd.sh
 ```shell
 ./SiliconFriend-ChatGPT/launch.sh
 ```
+
+#### 总结事件和用户性格
+如果你只需要为memory.json文件中保存的记忆，总结其中的事件和用户性格，可修改脚本中的文件名后，运行以下代码。在每个demo文件中，也有接口可以直接进行总结。
+```
+cd memory_bank/
+python summarize_memory.json
+```
+
+
 ### 评估数据
 在构建评估数据时，我们首先使用ChatGPT扮演不同性格的用户，生成包含多个话题的对话历史（memory banks）。然后我们人工构造了100个测试问题(probing questions)评估模型的记忆检索性能。评估数据分为中文和英文两版本：中文版本的对话历史和测试问题分别存储在[eval_data/cn/memory_bank_cn.json](eval_data/cn/memory_bank_cn.json)和[eval_data/cn/probing_questions_cn.jsonl](eval_data/cn/probing_questions_cn.jsonl), 英文版本的的对话历史和测试问题分别存储在[eval_data/en/memory_bank_cn.json](eval_data/cn/memory_bank_cn.json)和[eval_data/en/probing_questions_cn.jsonl](eval_data/cn/probing_questions_cn.jsonl)。
 
