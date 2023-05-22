@@ -68,7 +68,7 @@ cd ./SiliconFriend-ChatGLM-BELLE
 bash launch_chatglm_cmd.sh
 ```
 
-#### SiliconFriend(BELLE) 命令行 Demo
+#### SiliconFriend(BELLE) CMD Demo
 
 Fill in 'OPENAI_API_KEY' and 'adapter_model' in [SiliconFriend-ChatGLM-BELLE/launch_belle_cmd.sh](SiliconFriend-ChatGLM-BELLE/launch_belle_cmd.sh). When running the bash, use the flag '--language=en' for English language and '--language=cn' for Chinese language. And run [SiliconFriend-ChatGLM-BELLE/launch_belle_cmd.sh](SiliconFriend-ChatGLM-BELLE/launch_belle_cmd.sh) in this repo:
 
@@ -76,7 +76,7 @@ Fill in 'OPENAI_API_KEY' and 'adapter_model' in [SiliconFriend-ChatGLM-BELLE/lau
 cd ./SiliconFriend-ChatGLM-BELLE
 bash launch_belle_cmd.sh
 ```
-#### SiliconFriend(ChatGPT) Web Demo
+#### SiliconFriend(ChatGPT) CMD Demo
 
 Fill in 'OPENAI_API_KEY' in [SiliconFriend-ChatGPT/launch.sh](SiliconFriend-ChatGPT/launch.sh). When running the bash, use the flag '--language=en' for English language and '--language=cn' for Chinese language. And run [SiliconFriend-ChatGPT/launch.sh](SiliconFriend-ChatGPT/launch.sh) in the repo:
 
@@ -84,6 +84,12 @@ Fill in 'OPENAI_API_KEY' in [SiliconFriend-ChatGPT/launch.sh](SiliconFriend-Chat
 ./SiliconFriend-ChatGPT/launch.sh
 ```
 
+#### Summarize Events and Memory
+If you only need to summarize the events and user personalities stored in the memory.json file, you can modify the file name in the script and run the following code. In each demo file, there are also interfaces available for direct summarization.
+```
+cd memory_bank/
+python summarize_memory.json
+```
 ## Citation
 
 If you find our work useful, please consider citing the following papers:
