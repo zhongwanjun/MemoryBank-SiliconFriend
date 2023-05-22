@@ -1,5 +1,7 @@
 ## Introduction
 
+This project includes the data, model and code for paper [MemoryBank: Enhancing Large Language Models with Long-Term Memory](https://arxiv.org/pdf/2305.10250.pdf).
+
 MemoryBank is a novel memory mechanism designed for Large Language Models (LLMs). With MemoryBank, models can access relevant memories, continuously evolve through memory updates, and adapt to user personalities by synthesizing past interactions. Inspired by the Ebbinghaus Forgetting Curve theory, MemoryBank incorporates a unique memory updating mechanism that mimics human-like memory behavior. This enables the AI to selectively forget or reinforce memories based on their significance and the passage of time, creating a remarkably natural memory system. MemoryBank seamlessly integrates with both closed-source models like [ChatGPT](https://chat.openai.com) and open-source models like [ChatGLM](https://github.com/THUDM/ChatGLM-6B) and [BELLE](https://github.com/LianjiaTech/BELLE). 
 
 ![](resources/framework.png)
