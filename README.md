@@ -91,7 +91,7 @@ Fill in 'OPENAI_API_KEY' in [SiliconFriend-ChatGPT/launch.sh](SiliconFriend-Chat
 If you only need to summarize the events and user personalities stored in the memory.json file, you can modify the file name in the script and run the following code. In each demo file, there are also interfaces available for direct summarization.
 ```
 cd memory_bank/
-python summarize_memory.json
+python summarize_memory.py
 ```
 ## Citation
 
